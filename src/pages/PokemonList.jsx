@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { usePokemonApi } from '../hooks/usePokemonApi';
-import PokemonCard from './PokemonCard';
+import PokemonCard from '../components/PokemonCard';
 
 const PokemonList = () => {
   const { pokemons, loading, error } = usePokemonApi();
@@ -19,6 +19,10 @@ const PokemonList = () => {
 
   return (
     <div className="container" style={{ padding: '2rem 1rem' }}>
+      <h1 className="title">
+        Pokémon Explorer
+      </h1>
+
       <input
         type="text"
         placeholder="Search Pokémon..."

@@ -4,6 +4,9 @@ import axios from 'axios';
 const PokemonCard = ({ pokemon }) => {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [cardLoaded, setCardLoaded] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -15,6 +18,8 @@ const PokemonCard = ({ pokemon }) => {
         console.error('Error fetching pokemon details:', error);
       } finally {
         setLoading(false);
+        // Trigger entrance animation after loading
+        setTimeout(() => setCardLoaded(true), 100);
       }
     };
 
@@ -33,11 +38,24 @@ const PokemonCard = ({ pokemon }) => {
 
   if (!details) return null;
 
+  const handleMouseDown = () => setIsPressed(true);
+  const handleMouseUp = () => setIsPressed(false);
+  const handleMouseLeave = () => setIsPressed(false);
+
   return (
-    <div className="pokemon-card">
+    <div
+      className={`pokemon-card ${cardLoaded ? 'card-entered' : ''} ${isPressed ? 'pressed' : ''}`}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleMouseDown}
+      onTouchEnd={handleMouseUp}
+    >
       <img
         src={details.sprites.front_default}
         alt={details.name}
+        onLoad={() => setImageLoaded(true)}
+        className={imageLoaded ? 'loaded' : ''}
       />
       <h3>
         {details.name}
@@ -46,7 +64,7 @@ const PokemonCard = ({ pokemon }) => {
         {details.types.map((type) => (
           <span
             key={type.type.name}
-            className="type-tag"
+            className={`type-tag type-${type.type.name}`}
           >
             {type.type.name}
           </span>
