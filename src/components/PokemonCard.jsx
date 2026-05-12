@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const PokemonCard = ({ pokemon }) => {
+const PokemonCard = ({ pokemon, onClick }) => {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -42,6 +42,10 @@ const PokemonCard = ({ pokemon }) => {
   const handleMouseUp = () => setIsPressed(false);
   const handleMouseLeave = () => setIsPressed(false);
 
+  const handleClick = () => {
+    if (onClick) onClick(details);
+  };
+
   return (
     <div
       className={`pokemon-card ${cardLoaded ? 'card-entered' : ''} ${isPressed ? 'pressed' : ''}`}
@@ -50,6 +54,7 @@ const PokemonCard = ({ pokemon }) => {
       onMouseLeave={handleMouseLeave}
       onTouchStart={handleMouseDown}
       onTouchEnd={handleMouseUp}
+      onClick={handleClick}
     >
       <img
         src={details.sprites.front_default}
